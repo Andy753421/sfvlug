@@ -1,0 +1,10 @@
+# Settings
+local.properties
+
+# Vim junk
+*~
+*.swp
+
+# Android junk
+bin/
+gen/

@@ -1,0 +1,13 @@
+UCLU LUG APIs
+-------------
+Upcoming Events (JSON):
+
+  https://linux.ucla.edu/wiki/Special:Ask/-5B-5BCategory:Events-5D-5D/-3FDate/-3FTime/-3FLocation/format%3Djson/sort%3DDate/prettyprint%3Dyes/offset%3D0
+
+Lounge Coffee Pot Status (JSON):
+
+  https://linux.ucla.edu/api/coffee.json
+
+Lounge Coffee Log (text):
+
+  https://linux.ucla.edu/api/coffee.log

@@ -1,0 +1,78 @@
+Basic tools usage
+=================
+This section covers creating an using a simple Android package.
+
+Command Line
+------------
+Create up an Android Project:
+
+    android create project                 \
+        --name     LugAtUcla               \
+        --activity LugAtUcla               \
+        --package  edu.ucla.linux.tutorial \
+        --target   android-18              \
+        --path     .
+
+Working with virtual devices:
+
+    android create avd                     \
+        --target android-18                \
+        --name   virtual
+
+    emulator                               \
+        -memory 1024                       \
+        -avd virtual
+
+Building and running:
+
+    ant debug
+    ant installd
+
+    adb shell am start -W                  \
+        -a android.intent.action.MAIN      \
+        -n edu.ucla.linux.tutorial/.LugAtUcla
+
+    adb logcat LugAtUcla:D '*:S'
+
+Additional ADB commands:
+
+    adb devices
+    adb start-server
+    adb kill-server
+
+    adb shell
+
+    adb logcat
+    adb install
+    adb uninstall
+
+    adb push <local> <remote>
+    adb pull <remote> <local>
+
+A note on version control
+-------------------------
+When using version control it is recommended to control certain files but
+exclude others. The following list describes the default files created by
+'android create project'. Files listed as 'control' should be included in
+version control, files listed as ignore should be excluded, and files listed as
+'delete' are unnecessary.
+
+Furthermore, some files marked with '*' and '~' are not really needed but would
+require minor modifications if they are removed.
+
+     control - build.xml
+     control - AndroidManifest.xml
+    *control - ant.properties
+    *control - project.properties
+    *ignore  - local.properties
+     delete  - proguard-project.txt
+
+     control - src/edu/ucla/linux/tutorial/LugAtUcla.java
+
+    ~control - res/values/strings.xml
+     control - res/layout/main.xml
+
+    *control - res/drawable-xhdpi/ic_launcher.png
+    *control - res/drawable-hdpi/ic_launcher.png
+    *control - res/drawable-mdpi/ic_launcher.png
+    *control - res/drawable-ldpi/ic_launcher.png
