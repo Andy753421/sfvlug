@@ -4,6 +4,11 @@
         android:versionCode="1"
         android:versionName="1.0">
 
+    <!-- Required for apps that connect to the internet. More permission exist
+         as well, accessing the SD Card or Camera. Simple sensors (like buttons
+         and the touch screen) do not need any special permissions. -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <!-- Setting the SDK Version will result in a more modern looking user
          interface (and allows more features), but will prevent installation on
          older android version. -->

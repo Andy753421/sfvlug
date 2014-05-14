@@ -7,8 +7,18 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/* Android provides multiple JSON libraries,
+ * we arbitrarily chose to use the org.json library */
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /*
  * CoffeeStatus represents the information retrieved from the Coffee API.
+ *
+ * We could use the JSON Object directly if we wanted to, but encapsulating it
+ * in an object is useful because we can deal with all different error cases in
+ * the same place and not have to worry about that in the rest of the app. It
+ * also lets decouples the user interface code from the JSON interface. 
  */
 public class CoffeeStatus
 {
@@ -20,6 +30,34 @@ public class CoffeeStatus
     public Date     potActivity = new Date(); // Last time the coffee pot was moved
     public boolean  lidOpen     = false;      // Is the coffee pot lid currently open?
     public Date     lidActivity = new Date(); // Last time the lid was opened or closed
+
+    public CoffeeStatus(JSONObject json) {
+        try {
+            // Note: does not handle timezone correctly
+            DateFormat fmt = new SimpleDateFormat("yyyy-MM-DD'T'hh:mm:ss");
+
+            // Lookup objects
+            JSONObject pot = json.getJSONObject("pot");
+            JSONObject lid = json.getJSONObject("lid");
+
+            // Set properties
+            this.potIn       = pot.getInt("currently_in") != 0;
+            this.potActivity = fmt.parse(pot.getString("last_activity"));
+            this.lidOpen     = lid.getInt("currently_open") != 0;
+            this.lidActivity = fmt.parse(lid.getString("last_activity"));
+        }
+        catch (NullPointerException e) {
+            // Kind of a hack, avoids extra checking in LugAtUcla
+            this.error = "Error downloading coffee status";
+        }
+        catch (JSONException e) {
+            this.error = "Error parsing coffee status: " + e.toString();
+        }
+        catch (ParseException e) {
+            this.error = "Error parsing dates" + e.toString();
+        }
+        Log.d("LugAtUcla", "CoffeeStatus: " + this.toString());
+    }
 
     // Convenience function to format coffee pot status as a string.
     public String toString() {
