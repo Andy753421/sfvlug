@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- This file specifies our user interface layout
+     
+     In addition it provides IDs for all our important widgets so that we can
+     reference them from within our Java code. Ideally, we would store the
+     strings such as "Lid Open" and "Pot In" in a separate strings resource
+     file, but for prototyping at least it's easier to just include them
+     inline. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <!-- Our generic status text view -->
+    <TextView
+        android:id="@+id/status"
+        android:text="LUG@UCLA"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

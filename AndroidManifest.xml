@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+        package="edu.ucla.linux.tutorial"
+        android:versionCode="1"
+        android:versionName="1.0">
+
+    <!-- Setting the SDK Version will result in a more modern looking user
+         interface (and allows more features), but will prevent installation on
+         older android version. -->
+    <uses-sdk android:minSdkVersion="18" android:targetSdkVersion="18" />
+
+    <application android:label="LugAtUcla">
+
+        <!-- Our main activity, the user interface that runs when the app is
+             started. The intent filter integrates our app with the "launcher",
+             which is the App that displays the icons on the home screen. -->
+        <activity android:name="LugAtUcla" android:label="LugAtUcla">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+    </application>
+
+</manifest>
