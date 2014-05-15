@@ -6,6 +6,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -188,6 +191,37 @@ public class LugAtUcla extends Activity
     public void onRefresh(View btn)
     {
         this.loadStatus();
+    }
+
+    /* Initialize the App menu
+     *   we define the menu in res/menu/menu.xml so all we have to do is load
+     *   it using MenuInflater. */
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    /* Handle menu item selections
+     *   since we named all our menu entries in the XML file we can just switch
+     *   on the menu item ID in order to determine which entry was selected by
+     *   the user */
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId()) {
+
+            // reload the coffee pot status
+            case R.id.refresh:
+                this.loadStatus();
+                return true;
+
+            case R.id.settings:
+                return true;
+
+            default:
+                return false;
+        }
     }
 
     /* Initialize our app
