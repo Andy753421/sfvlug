@@ -1,5 +1,5 @@
 # Settings
-local.properties
+config.mk
 
 # Vim junk
 *~
@@ -8,3 +8,4 @@ local.properties
 # Android junk
 bin/
 gen/
+obj/
