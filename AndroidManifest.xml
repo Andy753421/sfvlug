@@ -26,6 +26,9 @@
             </intent-filter>
         </activity>
 
+        <!-- Our second activity, the Preferences screen. -->
+        <activity android:name="Settings" />
+
     </application>
 
 </manifest>

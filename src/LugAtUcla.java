@@ -1,9 +1,12 @@
 package edu.ucla.linux.tutorial;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -39,6 +42,11 @@ public class LugAtUcla extends Activity
     /* URL Constants - only used if the preferences file is invalid */
     private final String COFFEE_JSON = "https://linux.ucla.edu/api/coffee.json";
     private final String COFFEE_LOG  = "https://linux.ucla.edu/api/coffee.log";
+
+    /* Settings - this provides access to the actual settings data,
+     *            the settings activity is in the Settings.java class
+     *            and provides the user interface for editing the settings. */
+    private SharedPreferences settings;
 
     /* Activity Widgets */
     private TextView  statusView;  // Text view for dumping ASCII status
@@ -135,8 +143,8 @@ public class LugAtUcla extends Activity
     /* Trigger a refresh of the coffee pot status */
     private void loadStatus()
     {
-        // Default Coffee Status URL
-        String location = this.COFFEE_JSON;
+        // Lookup URL in the user preferences, COFFEE_JSON is the default URL
+        String location = this.settings.getString("coffee_json", this.COFFEE_JSON);
 
         // Notify the user that we're loading
         statusView.setText("Loading..");
@@ -216,7 +224,19 @@ public class LugAtUcla extends Activity
                 this.loadStatus();
                 return true;
 
+            // open the user settings list
+            //   In Android, activities are started using Intents rather than
+            //   open directly. Here we use an "explicit" Intent by specifying
+            //   the specific  class (Settings.class) that we want Android to
+            //   start for us.
+            //
+            //   We can also use an "implicit" Intents if we don't know the
+            //   class name, such as if we wanted to open a PDF file. In that
+            //   case Android would search for an App that can handle PDF files
+            //   and deliver the Intent to that App.
             case R.id.settings:
+                Intent intent = new Intent(this, Settings.class);
+                this.startActivity(intent);
                 return true;
 
             default:
@@ -234,6 +254,12 @@ public class LugAtUcla extends Activity
 
         // Load the user interfaces from the XML UI description
         setContentView(R.layout.main);
+
+        // Set the default preferences values our XML settings file
+        PreferenceManager.setDefaultValues(this, R.xml.settings, false);
+
+        // Grab the settings (containing the server URLs)
+        this.settings    = PreferenceManager.getDefaultSharedPreferences(this);
 
         // Lookup all our user interface widgets
         this.statusView  =  (TextView)findViewById(R.id.status);
