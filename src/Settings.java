@@ -1,4 +1,4 @@
-package edu.ucla.linux.tutorial;
+package org.sfvlug.tutorial;
 
 import android.os.Bundle;
 import android.preference.PreferenceActivity;

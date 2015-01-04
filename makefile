@@ -1,7 +1,7 @@
 # Settings
-PROGRAM  ?= LugAtUcla
-ACTIVITY ?= LugAtUcla
-PACKAGE  ?= edu.ucla.linux.tutorial
+PROGRAM  ?= SfvLug
+ACTIVITY ?= SfvLug
+PACKAGE  ?= org.sfvlug.tutorial
 
 # Include common files
 -include config.mk

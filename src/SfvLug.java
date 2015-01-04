@@ -1,4 +1,4 @@
-package edu.ucla.linux.tutorial;
+package org.sfvlug.tutorial;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -37,7 +37,7 @@ import org.json.JSONObject;
  * application data from within this class using functions such as
  * findViewById.
  */
-public class LugAtUcla extends Activity
+public class SfvLug extends Activity
 {
     /* URL Constants - only used if the preferences file is invalid */
     private final String COFFEE_JSON = "https://linux.ucla.edu/api/coffee.json";
@@ -69,7 +69,7 @@ public class LugAtUcla extends Activity
         try {
             return new JSONObject(text);
         } catch (JSONException e) {
-            Log.d("LugAtUcla", "Invalid JSON Object: " + text);
+            Log.d("SfvLug", "Invalid JSON Object: " + text);
             return null;
         }
     }
@@ -106,10 +106,10 @@ public class LugAtUcla extends Activity
             conn.disconnect();
         }
         catch (MalformedURLException e) {
-            Log.d("LugAtUcla", "Invalid URL: " + location);
+            Log.d("SfvLug", "Invalid URL: " + location);
         }
         catch (IOException e) {
-            Log.d("LugAtUcla", "Download failed for: " + location);
+            Log.d("SfvLug", "Download failed for: " + location);
         }
 
         return lines;
@@ -173,7 +173,7 @@ public class LugAtUcla extends Activity
                 // Java passes this as a variable argument array, but we only
                 // use the first entry.
                 String       location = args[0];
-                JSONObject   json     = LugAtUcla.this.readUrlObject(location);
+                JSONObject   json     = SfvLug.this.readUrlObject(location);
                 CoffeeStatus status   = new CoffeeStatus(json);
                 return status;
             }
@@ -182,8 +182,8 @@ public class LugAtUcla extends Activity
             // This is executed in the Main thread once again so that we can
             // update the user interface.
             protected void onPostExecute(CoffeeStatus status) {
-                LugAtUcla.this.setStatus(status);
-                Toast.makeText(LugAtUcla.this, "Load complete", Toast.LENGTH_SHORT).show();
+                SfvLug.this.setStatus(status);
+                Toast.makeText(SfvLug.this, "Load complete", Toast.LENGTH_SHORT).show();
             }
 
         }.execute(location);

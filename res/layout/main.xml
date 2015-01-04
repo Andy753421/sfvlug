@@ -74,7 +74,7 @@
          refresh button to the bottom of the page -->
     <TextView
         android:id="@+id/status"
-        android:text="LUG@UCLA"
+        android:text="SFVLUG"
         android:layout_weight="1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" />

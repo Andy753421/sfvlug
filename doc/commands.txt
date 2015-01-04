@@ -6,21 +6,21 @@ Command Line
 ------------
 Create up an Android Project:
 
-    android create project                 \
-        --name     LugAtUcla               \
-        --activity LugAtUcla               \
-        --package  edu.ucla.linux.tutorial \
-        --target   android-18              \
+    android create project             \
+        --name     SfvLug              \
+        --activity SfvLug              \
+        --package  org.sfvlug.tutorial \
+        --target   android-18          \
         --path     .
 
 Working with virtual devices:
 
-    android create avd                     \
-        --target android-18                \
+    android create avd                 \
+        --target android-18            \
         --name   virtual
 
-    emulator                               \
-        -memory 1024                       \
+    emulator                           \
+        -memory 1024                   \
         -avd virtual
 
 Building and running:
@@ -28,11 +28,11 @@ Building and running:
     ant debug
     ant installd
 
-    adb shell am start -W                  \
-        -a android.intent.action.MAIN      \
-        -n edu.ucla.linux.tutorial/.LugAtUcla
+    adb shell am start -W              \
+        -a android.intent.action.MAIN  \
+        -n org.sfvlug.tutorial/.SfvLug
 
-    adb logcat LugAtUcla:D '*:S'
+    adb logcat SfvLug:D '*:S'
 
 Additional ADB commands:
 
@@ -67,7 +67,7 @@ require minor modifications if they are removed.
     *ignore  - local.properties
      delete  - proguard-project.txt
 
-     control - src/edu/ucla/linux/tutorial/LugAtUcla.java
+     control - src/org/sfvlug/tutorial/SfvLug.java
 
     ~control - res/values/strings.xml
      control - res/layout/main.xml

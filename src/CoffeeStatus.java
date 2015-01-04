@@ -1,4 +1,4 @@
-package edu.ucla.linux.tutorial;
+package org.sfvlug.tutorial;
 
 import android.util.Log;
 
@@ -47,7 +47,7 @@ public class CoffeeStatus
             this.lidActivity = fmt.parse(lid.getString("last_activity"));
         }
         catch (NullPointerException e) {
-            // Kind of a hack, avoids extra checking in LugAtUcla
+            // Kind of a hack, avoids extra checking in SfvLug
             this.error = "Error downloading coffee status";
         }
         catch (JSONException e) {
@@ -56,7 +56,7 @@ public class CoffeeStatus
         catch (ParseException e) {
             this.error = "Error parsing dates" + e.toString();
         }
-        Log.d("LugAtUcla", "CoffeeStatus: " + this.toString());
+        Log.d("SfvLug", "CoffeeStatus: " + this.toString());
     }
 
     // Convenience function to format coffee pot status as a string.
