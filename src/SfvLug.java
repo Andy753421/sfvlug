@@ -1,19 +1,15 @@
 package org.sfvlug.tutorial;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,8 +21,9 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
-import java.util.List;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -39,42 +36,26 @@ import org.json.JSONObject;
  */
 public class SfvLug extends Activity
 {
-    /* URL Constants - only used if the preferences file is invalid */
-    private final String COFFEE_JSON = "https://linux.ucla.edu/api/coffee.json";
-    private final String COFFEE_LOG  = "https://linux.ucla.edu/api/coffee.log";
-
-    /* Settings - this provides access to the actual settings data,
-     *            the settings activity is in the Settings.java class
-     *            and provides the user interface for editing the settings. */
-    private SharedPreferences settings;
+    /* URL Constants - signed Meetup meetings API */
+    private final String MEETUP_API =
+        "http://api.meetup.com/2/events?"
+            + "group_id=2575122&"
+            + "status=upcoming&"
+            + "order=time&"
+            + "limited_events=False&"
+            + "desc=false&"
+            + "offset=0&"
+            + "photo-host=public&"
+            + "format=json&"
+            + "page=500&"
+            + "fields=&"
+            + "sig_id=28045742&"
+            + "sig=42d2f7ec48b697ba087db2d8f2c65a2f144de8b1";
 
     /* Activity Widgets */
     private TextView  statusView;  // Text view for dumping ASCII status
-                                   // This also shows error messages
 
-    private ImageView potIn;       // Star icon for pos status
-    private TextView  potActivity; // Pot activity timestamp field
-    private ImageView lidOpen;     // Star icon for lid status
-    private TextView  lidActivity; // Lid activity timestamp field
-
-    /* Convert URL data into a JSON Object
-     *   Currently we don't actually need separate functions for reading lines
-     *   of text and reading JSON objects However, if we want to support the
-     *   COFFEE_LOG URL in the future having a function to get the lines of
-     *   text will be useful. */
-    private JSONObject readUrlObject(String location)
-    {
-        List<String> lines = readUrlLines(location);
-        String       text  = TextUtils.join("", lines);
-        try {
-            return new JSONObject(text);
-        } catch (JSONException e) {
-            Log.d("SfvLug", "Invalid JSON Object: " + text);
-            return null;
-        }
-    }
-
-    /* Read URL data as lines of text
+    /* Read URL data as a JSON Object
      *   Android provides several HTTP/URL libraries, like the JSON library, we
      *   arbitrarily picked HttpURLConnection.
      *
@@ -83,10 +64,11 @@ public class SfvLug extends Activity
      *
      *   We also keep the URL library internal to this function so that we can
      *   easily change it if we ever want to. */
-    private List<String> readUrlLines(String location)
+    private JSONObject loadUrl(String location)
     {
         LinkedList<String> lines = new LinkedList<String>();
 
+        // Download URL to array of lines
         try {
             // Open URL
             URL url = new URL(location);
@@ -112,45 +94,62 @@ public class SfvLug extends Activity
             Log.d("SfvLug", "Download failed for: " + location);
         }
 
-        return lines;
+        // Load text into JSON Object
+        String text = TextUtils.join("", lines);
+        try {
+            return new JSONObject(text);
+        } catch (JSONException e) {
+            Log.d("SfvLug", "Invalid JSON Object: " + text);
+            return null;
+        }
     }
 
-    /* Display the coffee status to the user */
-    private void setStatus(CoffeeStatus status)
+    /* Display the meeting status to the user */
+    private void setStatus(JSONObject status)
     {
-        DateFormat fmt = DateFormat.getDateTimeInstance();
-        int        yes = android.R.drawable.star_on;
-        int        no  = android.R.drawable.star_off;
+        String text = null;
 
-        // Update graphical display 
-        //   this provides a nice, readable representation of the coffee
-        //   status, but it does not support showing error messages so we only
-        //   update it if there have been no errors.
-        if (status.error == null) {
-            this.potIn.setImageResource(status.potIn ? yes : no);
-            this.potActivity.setText(fmt.format(status.potActivity));
-            this.lidOpen.setImageResource(status.lidOpen ? yes : no);
-            this.lidActivity.setText(fmt.format(status.lidActivity));
+        // Extract info from JSON object and format output messages
+        try {
+            DateFormat fmt = new SimpleDateFormat("yyyy-MM-DD'T'hh:mm:ss");
+
+            JSONObject event = status.getJSONArray("results").getJSONObject(0);
+            JSONObject venue = event.getJSONObject("venue");
+
+            String name  = event.getString("name");
+            String where = venue.getString("name") + " " + venue.getString("city");
+            long   stamp = event.getLong("time") + event.getLong("utc_offset");
+
+            String when  = fmt.format(new Date(stamp));
+
+            text = "What:  " + name  + "\n" +
+                   "When:  " + when  + "\n" +
+                   "Where: " + where + "\n";
         }
+        catch (NullPointerException e) {
+            text = "Error downloading meeting status";
+        }
+        catch (JSONException e) {
+            text = "Error parsing meeting status: " + e.toString();
+        }
+        Log.d("LugAtUcla", "Next meeting: " + this.toString());
 
         // Set text view contents
-        //   normally this shows the same information as the graphical display,
-        //   but if there are errors, we will display them here.
         statusView.setTypeface(Typeface.MONOSPACE);
-        statusView.setText(status.toString());
+        statusView.setText(text);
     }
 
-    /* Trigger a refresh of the coffee pot status */
+    /* Trigger a refresh of the meeting status */
     private void loadStatus()
     {
-        // Lookup URL in the user preferences, COFFEE_JSON is the default URL
-        String location = this.settings.getString("coffee_json", this.COFFEE_JSON);
+        // Set URI location
+        String location = this.MEETUP_API;
 
         // Notify the user that we're loading
         statusView.setText("Loading..");
 
         // Update status in a background thread
-        // 
+        //
         // In Android, we normally cannot access the network from the main
         // thread; doing so would cause the user interface to freeze during
         // data transfer.
@@ -161,27 +160,24 @@ public class SfvLug extends Activity
         // finished.
         //
         // The first Java Generic parameter are:
-        //   1. String       - argument for doInBackground, from .execute()
-        //   2. Void         - not used here, normally used for progress bars
-        //   3. CoffeeStatus - the return type from doInBackground which is
-        //                     passed to onPostExecute function.
-        new AsyncTask<String, Void, CoffeeStatus>() {
+        //   1. String     - argument for doInBackground, from .execute()
+        //   2. Void       - not used here, normally used for progress bars
+        //   3. JSONObject - the return type from doInBackground which is
+        //                   passed to onPostExecute function.
+        new AsyncTask<String, Void, JSONObject>() {
 
             // Called from a background thread, so we don't block the user
             // interface. Using AsyncTask synchronization is handled for us.
-            protected CoffeeStatus doInBackground(String... args) {
-                // Java passes this as a variable argument array, but we only
-                // use the first entry.
-                String       location = args[0];
-                JSONObject   json     = SfvLug.this.readUrlObject(location);
-                CoffeeStatus status   = new CoffeeStatus(json);
-                return status;
+            protected JSONObject doInBackground(String... args) {
+                // Java passes this as a variable argument array,
+                // but we only use the first entry.
+                return SfvLug.this.loadUrl(args[0]);
             }
 
             // Called once in the main thread once doInBackground finishes.
             // This is executed in the Main thread once again so that we can
             // update the user interface.
-            protected void onPostExecute(CoffeeStatus status) {
+            protected void onPostExecute(JSONObject status) {
                 SfvLug.this.setStatus(status);
                 Toast.makeText(SfvLug.this, "Load complete", Toast.LENGTH_SHORT).show();
             }
@@ -219,24 +215,9 @@ public class SfvLug extends Activity
     {
         switch (item.getItemId()) {
 
-            // reload the coffee pot status
+            // reload the meeting status
             case R.id.refresh:
                 this.loadStatus();
-                return true;
-
-            // open the user settings list
-            //   In Android, activities are started using Intents rather than
-            //   open directly. Here we use an "explicit" Intent by specifying
-            //   the specific  class (Settings.class) that we want Android to
-            //   start for us.
-            //
-            //   We can also use an "implicit" Intents if we don't know the
-            //   class name, such as if we wanted to open a PDF file. In that
-            //   case Android would search for an App that can handle PDF files
-            //   and deliver the Intent to that App.
-            case R.id.settings:
-                Intent intent = new Intent(this, Settings.class);
-                this.startActivity(intent);
                 return true;
 
             default:
@@ -255,20 +236,12 @@ public class SfvLug extends Activity
         // Load the user interfaces from the XML UI description
         setContentView(R.layout.main);
 
-        // Set the default preferences values our XML settings file
-        PreferenceManager.setDefaultValues(this, R.xml.settings, false);
-
-        // Grab the settings (containing the server URLs)
-        this.settings    = PreferenceManager.getDefaultSharedPreferences(this);
-
         // Lookup all our user interface widgets
         this.statusView  =  (TextView)findViewById(R.id.status);
-        this.potIn       = (ImageView)findViewById(R.id.pot_in);
-        this.potActivity =  (TextView)findViewById(R.id.pot_activity);
-        this.lidOpen     = (ImageView)findViewById(R.id.lid_open);
-        this.lidActivity =  (TextView)findViewById(R.id.lid_activity);
 
         // Trigger the initial status update
         this.loadStatus();
     }
 }
+
+// vim: ts=4 sw=4 sts=4 et

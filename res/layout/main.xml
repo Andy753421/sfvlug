@@ -12,64 +12,6 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
 
-    <!-- This is the to part of our UI
-
-         We use a table layout here so that all the icons line up nicely. This
-         could probably be created in the UI editor, but you can just search
-         Google and write the XML manually. -->
-    <TableLayout
-        android:stretchColumns="2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-
-        <TableRow
-            android:gravity="center_vertical">
-
-            <ImageView
-                android:id="@+id/pot_in"
-                android:src="@android:drawable/star_off" />
-
-            <TextView
-                android:text="Pot In" />
-
-            <TextView
-                android:id="@+id/pot_activity"
-                android:text="Last Activity"
-                android:gravity="right" />
-
-        </TableRow>
-
-        <TableRow
-            android:gravity="center_vertical">
-
-            <ImageView
-                android:id="@+id/lid_open"
-                android:src="@android:drawable/star_off" />
-
-            <TextView
-                android:text="Lid Open" />
-
-            <TextView
-                android:id="@+id/lid_activity"
-                android:text="Last Activity"
-                android:gravity="right" />
-
-        </TableRow>
-    </TableLayout>
-
-    <!-- Android doesn't provide a good way to make separators, supposedly we
-         can use the built-in "divider_horizontal" images, but they don't seem
-         to work. Setting the background color, width, height, and padding lets
-         us draw a divider manually. -->
-    <ImageView
-        android:paddingTop="10px"
-        android:paddingBottom="10px"
-        android:layout_height="1dp"
-        android:layout_width="fill_parent"
-        android:layout_gravity="center_horizontal"
-        android:background="@android:color/darker_gray"
-        android:src="@android:drawable/divider_horizontal_dark" />
-
     <!-- Our generic status text view, setting layout_weight=1 pushes the
          refresh button to the bottom of the page -->
     <TextView
@@ -84,7 +26,7 @@
          The onRefresh method is run when the button is clicked -->
     <Button
         android:id="@+id/refresh"
-        android:text="Refresh Coffee Status"
+        android:text="Refresh Meetup Status"
         android:onClick="onRefresh"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" />
