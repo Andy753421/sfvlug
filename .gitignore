@@ -5,6 +5,14 @@ config.mk
 *~
 *.swp
 
+# Latex junk
+*.aux
+*.log
+*.nav
+*.out
+*.snm
+*.toc
+
 # Android junk
 bin/
 gen/

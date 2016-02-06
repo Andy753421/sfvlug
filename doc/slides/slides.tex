@@ -1,0 +1,100 @@
+\documentclass[14pt]{beamer}
+
+% Commands/macros %
+\newcommand{\screen}[1]{
+  \setlength{\leftmargin}{0pt}
+  \setlength{\rightmargin}{0pt}
+  \begin{center}
+    \includegraphics[height=2.70in,width=4in,keepaspectratio]{#1}
+  \end{center}
+}
+\newcommand{\footer}[1]{
+  \begingroup
+  \renewcommand\thefootnote{}\footnote{#1}
+  \addtocounter{footnote}{-1}
+  \endgroup
+}
+
+% Header/theme %
+\usetheme{umbc2}
+\setbeamerfont{structure}{family=\rmfamily,shape=\itshape}
+\setbeamerfont{footline}{size=\fontsize{8}{10}\selectfont}
+
+% Import packages
+\usepackage[latin1]{inputenc}
+\usepackage{times}
+\usepackage[T1]{fontenc}
+\usepackage{graphics}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{caption}
+\usepackage{subcaption}
+
+% Title
+\author{Andy Spencer}
+%\title{\url{http://pileus.org/andy/cs239}}
+
+% Document
+\begin{document}
+
+\begin{frame}{Android Fundamentals}
+  \structure{Development Tools}
+  \begin{itemize}
+    \item Java Programming Languages
+    \item Android SDK
+      \begin{itemize}
+        \item Android Development Tools (Eclipse IDE)
+        \item Android Studio (IntelliJ IDE)
+      \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Android Fundamentals}
+  \structure{Android Applications}
+  \begin{itemize}
+    \item APK files
+    \item Build scripts
+    \item Source Code
+    \item Resources (Images, Layouts, Menus, Prefs)
+    \item AndroidManifest.xml
+  \end{itemize}
+\end{frame}
+  
+\begin{frame}{Android Fundamentals}
+  \structure{Publishing}
+  \begin{itemize}
+    \item Keys and Signing
+    \item Play Store and F-Droid
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Android Fundamentals}
+  \structure{App Components}
+  \begin{itemize}
+    \item Activities and Services
+    \item Content Providers and Broadcast Receivers
+    \item Intents and Intent Filters
+    \item User Interface (Layouts, Menus, Fragments, etc)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Activities and Services}
+  \screen{../images/components.pdf}
+\end{frame}
+
+\begin{frame}{Intent Processing}
+  \screen{../images/intent-filters.png}
+  \footer{http://developer.android.com/guide/components/intents-filters.html}
+\end{frame}
+
+\begin{frame}{Intent Chooser}
+  \screen{../images/intent-chooser.png}
+  \footer{http://developer.android.com/guide/components/intents-filters.html}
+\end{frame}
+
+\begin{frame}{Intent Chooser}
+  \screen{../images/yamba.pdf}
+  \footer{https://thenewcircle.com/s/post/1178/architecting\_android\_apps}
+\end{frame}
+
+\end{document}

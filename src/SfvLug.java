@@ -132,7 +132,7 @@ public class SfvLug extends Activity
         catch (JSONException e) {
             text = "Error parsing meeting status: " + e.toString();
         }
-        Log.d("LugAtUcla", "Next meeting: " + this.toString());
+        Log.d("SfvLug", "Next meeting: " + this.toString());
 
         // Set text view contents
         statusView.setTypeface(Typeface.MONOSPACE);
